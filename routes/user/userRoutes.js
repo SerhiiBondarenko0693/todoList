@@ -162,6 +162,7 @@ const continueWidthGoogle = async (req, res) =>{
 
 const resetPassword = async (req,res) => {
     const emailReq = req.body.email
+    console.log("emailReq", emailReq);
     try{
         await client.connect()
         const user = await userDB.findOne({email: emailReq});
