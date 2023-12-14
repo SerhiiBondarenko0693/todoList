@@ -5,7 +5,16 @@ const bcrypt = require('bcrypt');
 const {sendMailResetPassword} = require("../../utils/sendMailServise/sendMailServise");
 const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
-const {generationToken} = require("./../../utils/generationToken/generationToken");
+
+
+const generationToken = (id) =>{
+    const payload = {
+        id
+    }
+    return jwt.sign(payload, secret, {expiresIn: "78h"})
+}
+
+
 const userDB = client.db("todoBase").collection('users');
 
 
