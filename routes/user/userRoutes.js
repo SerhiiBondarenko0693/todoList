@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const {sendMailResetPassword} = require("../../utils/sendMailServise/sendMailServise");
 const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
-const {generationToken} = require("./../../utils/generationToken/generationToken");
+const generationToken = require("./../../utils/generationToken/generationToken");
 const userDB = client.db("todoBase").collection('users');
 
 
