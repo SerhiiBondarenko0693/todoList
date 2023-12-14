@@ -192,22 +192,22 @@ const resetPassword = async (req,res) => {
 
 
 const activityPassword = async (req, res) => {
-    const passwordReq = req.params.link;
-    console.log(passwordReq);
-    const hashPassword = bcrypt.hashSync(passwordReq, 7)
-    await client.connect()
-    const user = await userDB.findOne({env: passwordReq });
-    console.log(user);
-    if (!user) {
-        throw new Error("User not found");
-    }
-    await userDB.updateOne(
-        { env: passwordReq },
-        { $set: { password: hashPassword, env:"" } }
-    );
-    console.log('Password is activated.');
-    // return res.redirect(URI);
-    console.log(URI);
+    // const passwordReq = req.params.link;
+    // console.log(passwordReq);
+    // const hashPassword = bcrypt.hashSync(passwordReq, 7)
+    // await client.connect()
+    // const user = await userDB.findOne({env: passwordReq });
+    // console.log(user);
+    // if (!user) {
+    //     throw new Error("User not found");
+    // }
+    // await userDB.updateOne(
+    //     { env: passwordReq },
+    //     { $set: { password: hashPassword, env:"" } }
+    // );
+    // console.log('Password is activated.');
+    // // return res.redirect(URI);
+    // console.log(URI);
     return res.redirect(URI);
 };
 
