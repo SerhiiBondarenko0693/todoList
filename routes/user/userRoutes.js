@@ -6,7 +6,7 @@ const {sendMailResetPassword, sendMailServiceMassage} = require("../../utils/sen
 const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
 const generateRandomPassword = require("../../utils/generationPassword/generationPassword");
-const URI = require("../../config");
+const {URI} = require("../../config");
 
 
 const generationToken = (id) =>{
@@ -207,7 +207,8 @@ const activityPassword = async (req, res) => {
     );
     console.log('Password is activated.');
     // return res.redirect(URI);
-    return res.redirect("https://www.google.com/");
+    console.log(URI);
+    return res.redirect(URI);
 };
 
 
