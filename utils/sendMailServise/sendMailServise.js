@@ -27,40 +27,20 @@ const sendMail = async (mailOptions) => {
     }
 };
 
-const sendAddNewsletter = async (email) =>{
-    const mailOptions = {
-        from: 'serhiibondarenko33@gmail.com',
-        to: email,
-        subject: "Thank you for subscribing to the store ShopCo",
-        text:"Now you will receive notifications about new products and special offers."
-    };
-    return await sendMail(mailOptions);
-}
 
-const sendMailServiceMassage = async (recipient, order) => {
+
+const sendMailServiceMassage = async (recipient) => {
     const mailOptions = {
         from: 'serhiibondarenko33@gmail.com',
         to: recipient,
-        subject: "Your order has been accepted ShopCo",
-        text: `Your order has been processed. You can view the details in your personal account. Order# ${order}`
+        subject: "Welcome your organizer",
+        text: `Author Serhii Bondarenko`
     };
     return await sendMail(mailOptions);
 };
 
 
 
-const sendMailServiceLink = async (recipient, link) => {
-    const mailOptions = {
-        from: 'serhiibondarenko33@gmail.com',
-        to: recipient,
-        subject: "Activate profile ShopCo",
-        html: `<div>
-                <h1>Для активації натисніть</h1>
-                <a href="${link}">${link}</a>
-            </div>`
-    };
-    return await sendMail(mailOptions);
-};
 
 const sendMailResetPassword = async (recipient, link, password) => {
     const mailOptions = {
@@ -90,8 +70,6 @@ const sendErr = async (email) =>{
 
 module.exports = {
     sendMailServiceMassage,
-    sendMailServiceLink,
     sendMailResetPassword,
-    sendAddNewsletter,
     sendErr
 };
