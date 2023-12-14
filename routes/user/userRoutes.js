@@ -165,7 +165,9 @@ const resetPassword = async (req,res) => {
     try{
         await client.connect()
         const user = await userDB.findOne({email: emailReq});
-        const userId = user.id.toString()
+        console.log(user);
+        const userId = user._id.toString()
+        console.log(userId);
         const randomPassword = generateRandomPassword(8)
         await userDB.updateOne({_id: new ObjectId(userId)},{
             $set: {env: randomPassword}});

@@ -3,7 +3,7 @@ const config = require("../../config");
 const enb = config.GMAIL_CONNECTION_STRING;
 const passGmail = enb.match(/.{1,4}/g).join(' ');
 const mass = passGmail;
-console.log(mass);
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
