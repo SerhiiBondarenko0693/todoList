@@ -13,7 +13,7 @@ router.post("/api/continueWidthGoogle", userRoutes.continueWidthGoogle);
 router.post("/api/login", userRoutes.loginUser);
 router.post("/api/isWalidToken", userRoutes.isValidToken);
 router.post("/api/resetPassword", userRoutes.resetPassword);
-router.get("/api/activityPassword", userRoutes.activityPassword);
+router.get("/api/activityPassword/:link", userRoutes.activityPassword);
 
 
 
