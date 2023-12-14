@@ -207,7 +207,7 @@ const activityPassword = async (req, res) => {
     // );
     // console.log('Password is activated.');
     // // return res.redirect(URI);
-    // console.log(URI);
+    console.log(URI);
     return res.redirect(URI);
 };
 
