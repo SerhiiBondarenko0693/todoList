@@ -47,15 +47,7 @@ const sendMailServiceMassage = async (recipient, order) => {
     return await sendMail(mailOptions);
 };
 
-const sendMailServiceMassageSupport = async (recipient, idMessage) => {
-    const mailOptions = {
-        from: 'serhiibondarenko33@gmail.com',
-        to: recipient,
-        subject: "support service ShopCo",
-        text: `Your appeal is registered under the number# ${idMessage}. Wait for our operator to contact you soon`
-    };
-    return await sendMail(mailOptions);
-};
+
 
 const sendMailServiceLink = async (recipient, link) => {
     const mailOptions = {
@@ -74,7 +66,7 @@ const sendMailResetPassword = async (recipient, link, password) => {
     const mailOptions = {
         from: 'serhiibondarenko33@gmail.com',
         to: recipient,
-        subject: "Support ShopCo",
+        subject: "Support ",
         html: `<div>
                 <h1>Your new one-time password :${password}</h1>
                 <h3>To activate, follow the link. Be sure to change the password in your personal account.</h3>
@@ -99,7 +91,6 @@ const sendErr = async (email) =>{
 module.exports = {
     sendMailServiceMassage,
     sendMailServiceLink,
-    sendMailServiceMassageSupport,
     sendMailResetPassword,
     sendAddNewsletter,
     sendErr

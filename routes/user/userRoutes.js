@@ -2,11 +2,10 @@ const {client} = require("../../db");
 const {ObjectId} = require("mongodb");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {sendMailServiceLink} = require("../../utils/sendMailServise/sendMailServise");
+const {sendMailResetPassword} = require("../../utils/sendMailServise/sendMailServise");
 const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
-const generationToken = require("./../../utils/generationToken/generationToken")
-
+const {generationToken} = require("./../../utils/generationToken/generationToken");
 const userDB = client.db("todoBase").collection('users');
 
 
@@ -49,12 +48,12 @@ const isValidToken = async (req, res) =>{
         if(!isUserBase){
             return res.send({
                 status:400,
-                "userauth": false
+                "userAuth": false
             })
         }
         return res.send({"userauth": true})
     }catch (errors){
-        return res.status(500).send("Server Error");
+        return res.status(400).send({"userAuth": false});
     }
 }
 
@@ -98,24 +97,122 @@ const registrationUser = async (req, res) =>{
 
 }
 
-const addpass = async (req, res) =>{
+// const addpass = async (req, res) =>{
+//     await client.connect()
+//     const hashPassword = bcrypt.hashSync("BAE270230!", 7)
+//     try{
+//         await client.connect()
+//         await userDB.updateOne(
+//             { email: "sergiy.ol.bondarenko@gmail.com" },
+//             {
+//                 $set: {
+//                     password: hashPassword
+//                 }
+//             })
+//
+//         return res.send({"addpass": true})
+//     }catch (errors){
+//         return res.status(500).send("Server Error");
+//     }
+// }
+
+const continueWidthGoogle = async (req, res) =>{
+    const {userName, password, email} = req.body;
     await client.connect()
-    const hashPassword = bcrypt.hashSync("BAE270230!", 7)
+    const isUserBase = await userDB.findOne({email: req.body.email});
+
     try{
-        await client.connect()
-        await userDB.updateOne(
-            { email: "sergiy.ol.bondarenko@gmail.com" },
-            {
-                $set: {
-                    password: hashPassword
-                }
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        if(isUserBase && isUserBase.password){
+            const token = generationToken(isUserBase._id.toString());
+            return res.send({
+                status: 200,
+                token:token
+            })
+        }
+        if(isUserBase && !isUserBase.password){
+            const updateUser = await userDB.findOne({email:email});
+            const userId = updateUser._id.toString()
+            const token = generationToken(userId);
+            return res.send({
+                status: 200,
+                token:token
             })
 
-        return res.send({"addpass": true})
-    }catch (errors){
-        return res.status(500).send("Server Error");
+        }else {
+            const hashPassword = bcrypt.hashSync(password, 7)
+            const candidate = {
+                userName: userName,
+                password: hashPassword,
+                email:email,
+                roll:"user"
+            }
+            const {insertedId} = await userDB.insertOne(candidate);
+            const idString = insertedId.toString();
+            const token = generationToken(idString);
+            // await sendMailServiceLink(email,
+            //     `https://shopcoserver-git-main-chesterfalmen.vercel.app/api/activate/${idString}`)
+            return res.send({
+                status: 200,
+                token:token
+            })
+        }
+
+    }catch (error) {
+        res.status(500).send("Server Error");
     }
+
 }
+
+const resetPassword = async (req,res) => {
+    const emailReq = req.body.email
+    try{
+        await client.connect()
+        const user = await userDB.findOne({email: emailReq});
+        const userId =user._id.toString()
+        const randomPassword =generateRandomPassword(8)
+        await userDB.updateOne({_id: new ObjectId(userId)},{
+            $set: {env: randomPassword}});
+        await sendMailResetPassword(emailReq,
+            `https://shopcoserver.vercel.app/api/activityPassword/${randomPassword}`,
+            randomPassword);
+        return res.send({
+            status:200,
+            message:"Password reset"
+        })
+
+        // https://shopcoserver-git-main-chesterfalmen.vercel.app/api/
+
+    }catch (error) {
+        return res.send({
+            status:500,
+            message:"User not found"
+        })
+    }
+};
+
+
+
+
+const activityPassword = async (req, res) => {
+    const passwordReq = req.params.link;
+    const hashPassword = bcrypt.hashSync(passwordReq, 7)
+    await client.connect()
+    const user = await usersDB.findOne({ env: passwordReq });
+    if (!user) {
+        throw new Error("User not found");
+    }
+    await usersDB.updateOne(
+        { env: passwordReq },
+        { $set: { password: hashPassword, env:"" } }
+    );
+    console.log('Password is activated.');
+    return res.redirect(URI);
+};
 
 
 
@@ -124,6 +221,6 @@ module.exports = {
     loginUser,
     isValidToken,
     registrationUser,
-    addpass
+    continueWidthGoogle
 
 }
