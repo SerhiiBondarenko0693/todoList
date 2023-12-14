@@ -1,4 +1,4 @@
-const {secret} = require("../userConfig")
+const {secret} = require("../../userConfig")
 const jwt = require("jsonwebtoken");
 
 const decodeToken = (token) => {

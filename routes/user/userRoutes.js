@@ -6,7 +6,7 @@ const {sendMailResetPassword, sendMailServiceMassage} = require("../../utils/sen
 const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
 const generateRandomPassword = require("../../utils/generationPassword/generationPassword");
-const {URI} = require("../../URI");
+const {URI} = require("../../config");
 
 
 const generationToken = (id) =>{
