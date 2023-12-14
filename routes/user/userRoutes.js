@@ -173,7 +173,7 @@ const resetPassword = async (req,res) => {
         await userDB.updateOne({_id: new ObjectId(userId)},{
             $set: {env: randomPassword}});
         await sendMailResetPassword(emailReq,
-            `https://todo-list-back-eta.vercel.app/api/activityPassword/${randomPassword}`,
+            `https://todo-list-back-eta.vercel.app/api/activityPassword/:${randomPassword}`,
             randomPassword);
         return res.send({
             status:200,
