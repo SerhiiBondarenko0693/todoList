@@ -2,15 +2,22 @@ const Router = require("express");
 const router = new Router;
 const todoRoutes = require("./routes/todo/todoRoute");
 const userRoutes = require("./routes/user/userRoutes")
+const authMiddleware = require("./utils/authMiddleware/authMiddleware");
 
 
 
 
-router.get('/api/gettodo', todoRoutes.getAllTodo);
-router.post('/api/addtodo', todoRoutes.addTodo);
+router.get('/api/getTodo',authMiddleware, todoRoutes.getAllTodo);
+router.post('/api/addTodo',authMiddleware, todoRoutes.addTodo);
+router.put('/api/updateTodo',authMiddleware, todoRoutes.updateTodo);
+router.delete('/api/deleteTodo',authMiddleware, todoRoutes.deleteTodo);
+
+
 
 router.post("/api/continueWidthGoogle", userRoutes.continueWidthGoogle);
 router.post("/api/login", userRoutes.loginUser);
+router.post("/api/registration", userRoutes.registrationUser);
+router.post("/api/changeUserPass", userRoutes.changeUserPass);
 router.post("/api/isWalidToken", userRoutes.isValidToken);
 router.post("/api/resetPassword", userRoutes.resetPassword);
 router.get("/api/activityPassword/:link", userRoutes.activityPassword);

@@ -7,6 +7,7 @@ const {validationResult} = require("express-validator");
 const {secret} = require("../../userConfig");
 const generateRandomPassword = require("../../utils/generationPassword/generationPassword");
 const {URI} = require("../../config");
+const decodeToken = require("../../utils/decoder/decoder");
 
 
 const generationToken = (id) =>{
@@ -190,7 +191,6 @@ const resetPassword = async (req,res) => {
 
 
 
-
 const activityPassword = async (req, res) => {
     const passwordReq = req.params.link;
     const hashPassword = bcrypt.hashSync(passwordReq, 7)
@@ -207,7 +207,42 @@ const activityPassword = async (req, res) => {
     return res.redirect(URI);
 };
 
+const changeUserPass = async (req, res) => {
+    const userIdCoded = req.headers.authorization;
+    const userIdDecoded = decodeToken(userIdCoded);
+    const {password, newPassword} = req.body
+    try{
+        await client.connect()
+        const isUserBase = await userDB.findOne({_id: new ObjectId(userIdDecoded)})
+        if(!isUserBase) {
+            return res.send({
+                status:400,
+                error:"User not found"
+            })
+        }
+        const validPassword = bcrypt.compareSync(password, isUserBase.password);
+        if(validPassword ){
+            const hashedPassword = bcrypt.hashSync(newPassword, 7);
+            await userDB.updateOne({ _id: new ObjectId(userIdDecoded) },
+                { $set: { password: hashedPassword } })
+            res.send({
+                status:200,
+                text : "Done"
+            })
+        }if(!validPassword ){
+            return res.send({
+                status:400,
+                error:"Error old password invalid"
+            })
+        }
 
+    }catch (error) {
+        return res.send({
+            status:500,
+            message:"Server Error in user processing"
+        })
+    }
+}
 
 
 module.exports = {
@@ -216,6 +251,7 @@ module.exports = {
     registrationUser,
     continueWidthGoogle,
     activityPassword,
-    resetPassword
+    resetPassword,
+    changeUserPass
 
 }
