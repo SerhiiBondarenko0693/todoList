@@ -1,6 +1,7 @@
 const {client} = require("../../db");
 const {ObjectId} = require("mongodb");
 const jwt = require("jsonwebtoken");
+const {secret} = require("../../userConfig");
 
 const todoDB = client.db("todoBase").collection('todoList');
 
