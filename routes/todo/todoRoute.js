@@ -62,7 +62,7 @@ const addTodo = async (req, res) =>{
 
 
 const updateTodo = async (req, res) =>{
-    const {_id,title, text, isOpen, isDelete} = req.body;
+    const {id,title, text, isOpen, isDelete} = req.body;
     const updateObj = {
         title:title,
         text:text,
@@ -72,7 +72,7 @@ const updateTodo = async (req, res) =>{
     }
 
     try{
-        const todo = {_id: new ObjectId(_id)};
+        const todo = {_id: new ObjectId(id)};
         const isTodoBase = await todoDB.findOne({todo})
         if(isTodoBase){
             await client.connect()
