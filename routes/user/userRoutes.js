@@ -30,14 +30,14 @@ const loginUser = async (req, res) => {
         if(!isUserBase) {
             return res.status(401).send({
                 status:401,
-                error:"Incorrect password or email"
+                message:"Incorrect password or email"
             })
         }
         const validPassword = bcrypt.compareSync(password, isUserBase.password)
         if(isUserBase && !validPassword ){
             return res.status(401).send({
                 status:401,
-                error:"Incorrect password"
+                message:"Incorrect password"
             })
         }
         const token = generationToken(isUserBase._id );
