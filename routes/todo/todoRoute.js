@@ -62,27 +62,35 @@ const addTodo = async (req, res) =>{
 
 
 const updateTodo = async (req, res) =>{
+    console.log("++++")
     const {id,title, text, isOpen, isDelete} = req.body;
     const updateObj = {
         title:title,
         text:text,
         isOpen:isOpen,
         isDelete:isDelete,
-        date:new Date
+        date:new Date,
+        id:id
     }
 
     try{
         const todo = {_id: new ObjectId(id)};
-        const isTodoBase = await todoDB.findOne({todo})
+        console.log(todo);
+        const isTodoBase = await todoDB.findOne({_id: new ObjectId(id)})
+        console.log(isTodoBase);
         if(isTodoBase){
             await client.connect()
             await todoDB.updateOne(
-                { _id: todo },
-                {$set: updateObj})
+                { _id: new ObjectId(id) },
+                {$set: {
+                        title:title,
+                        text:text,
+                        isOpen:isOpen,
+                        isDelete:isDelete,
+                        date:new Date
+                    }})
 
-            return res.send({
-                massage:"Done"
-            })
+            return res.send(updateObj)
         }
     }catch (error) {
         res.status(500).send("Server Error");

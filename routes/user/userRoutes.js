@@ -28,15 +28,15 @@ const loginUser = async (req, res) => {
         await client.connect()
         const isUserBase = await userDB.findOne({email: email});
         if(!isUserBase) {
-            return res.send({
-                status:400,
+            return res.status(401).send({
+                status:401,
                 error:"Incorrect password or email"
             })
         }
         const validPassword = bcrypt.compareSync(password, isUserBase.password)
         if(isUserBase && !validPassword ){
-            return res.send({
-                status:400,
+            return res.status(401).send({
+                status:401,
                 error:"Incorrect password"
             })
         }
