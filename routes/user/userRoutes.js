@@ -23,33 +23,33 @@ const userDB = client.db("todoBase").collection('users');
 
 
 const loginUser = async (req, res) => {
-    const {password, email} = req.body
-    try{
-        await client.connect()
-        const isUserBase = await userDB.findOne({email: email});
-        if(!isUserBase) {
+    const { password, email } = req.body;
+    try {
+        await client.connect();
+        const isUserBase = await userDB.findOne({ email: email });
+        if (!isUserBase) {
             return res.status(401).send({
-                status:401,
-                message:"Incorrect password or email"
-            })
+                status: 401,
+                error: "Incorrect password or email"
+            });
         }
-        const validPassword = bcrypt.compareSync(password, isUserBase.password)
-        if(isUserBase && !validPassword ){
+        const validPassword = bcrypt.compareSync(password, isUserBase.password);
+        if (!validPassword) {
             return res.status(401).send({
-                status:401,
-                message:"Incorrect password"
-            })
+                status: 401,
+                error: "Incorrect password or email"
+            });
         }
-        const token = generationToken(isUserBase._id );
-        return res.send({token})
-    }catch (error) {
-        return res.send({
-            status:500,
-            error:"Server Error"
+        const token = generationToken(isUserBase._id);
+        return res.send({ token });
+    } catch (error) {
+        console.error("Error in loginUser:", error);
+        return res.status(500).send({
+            status: 500,
+            error: "An error occurred"
         });
-    };
+    }
 };
-
 const isValidToken = async (req, res) =>{
     const token = req.headers.authorization;
     try{
