@@ -46,7 +46,7 @@ const loginUser = async (req, res) => {
         console.error("Error in loginUser:", error);
         return res.status(500).send({
             status: 500,
-            error: "An error occurred"
+            error: "An error occurred111"
         });
     }
 };
