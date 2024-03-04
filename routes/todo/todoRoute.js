@@ -26,8 +26,8 @@ const getAllTodo = async (req, res) =>{
         const totalCount = await todoDB.countDocuments(query);
         const hasNextPage = skip + limit < totalCount;
         const cursor = await todoDB.find({...query, user:userId, isDelete:false}).skip(skip).limit(limit);
-        const data = await cursor.toArray();
-        res.send(data,hasNextPage);
+        const list = await cursor.toArray();
+        res.send(list,hasNextPage);
     }catch (error) {
         res.status(500).send("Server Error");
     }
