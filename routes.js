@@ -7,7 +7,7 @@ const authMiddleware = require("./utils/authMiddleware/authMiddleware");
 
 
 
-router.get('/api/getTodo',authMiddleware, todoRoutes.getAllTodo);
+router.post('/api/getTodo',authMiddleware, todoRoutes.getAllTodo);
 router.post('/api/addTodo',authMiddleware, todoRoutes.addTodo);
 router.put('/api/updateTodo',authMiddleware, todoRoutes.updateTodo);
 router.delete('/api/deleteTodo',authMiddleware, todoRoutes.deleteTodo);
