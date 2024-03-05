@@ -45,24 +45,41 @@ const addTodo = async (req, res) =>{
         isDelete:false,
         user:userId
     }
-
     try{
         await client.connect();
         await todoDB.insertOne(newTodo)
         res.send({
             massage:"Done"
         })
-
-
     }catch (error) {
         res.status(500).send("Server Error");
     }
 };
 
+const doneTodo = async (req, res) =>{
+    const {id} = req.body;
+    try{
+        const isTodoBase = await todoDB.findOne({_id:new ObjectId(id)});
+       if(isTodoBase){
+           await client.connect();
+           await todoDB.updateOne(
+               {_id:new ObjectId(id)},
+               {$set:{
+                       isOpen:false
+                   }}
+           )
+           return res.send({
+               massage:"Done"
+           })
+       }
+    }catch (error) {
+        res.status(500).send("Server Error");
+    }
+
+}
 
 
 const updateTodo = async (req, res) =>{
-    console.log("++++")
     const {id,title, text, isOpen, isDelete} = req.body;
     const updateObj = {
         title:title,
@@ -121,6 +138,7 @@ module.exports = {
     getAllTodo,
     addTodo,
     updateTodo,
-    deleteTodo
+    deleteTodo,
+    doneTodo
 
 }
