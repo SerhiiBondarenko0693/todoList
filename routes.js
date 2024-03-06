@@ -11,7 +11,7 @@ router.post('/api/getTodo',authMiddleware, todoRoutes.getAllTodo);
 router.post('/api/addTodo',authMiddleware, todoRoutes.addTodo);
 router.post('/api/doneTodo',authMiddleware, todoRoutes.doneTodo);
 router.put('/api/updateTodo',authMiddleware, todoRoutes.updateTodo);
-router.delete('/api/deleteTodo',authMiddleware, todoRoutes.deleteTodo);
+router.delete('/api/deleteTodo/:id',authMiddleware, todoRoutes.deleteTodo);
 
 
 
