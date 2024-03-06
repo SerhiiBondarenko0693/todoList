@@ -118,11 +118,11 @@ const deleteTodo = async (req, res) =>{
     const id = req.params.id;
     try{
         await client.connect()
-        const todo = {_id: new ObjectId(id)}
-        await todoDB.deleteOne({ _id: todo })
-        return res.send({
-            massage:"Done"
-        })
+        await todoDB.updateOne(
+            { _id: new ObjectId(id) },
+            {$set: {
+                    isDelete:true,
+                }})
     }catch (error) {
         res.status(500).send("Server Error");
     }
