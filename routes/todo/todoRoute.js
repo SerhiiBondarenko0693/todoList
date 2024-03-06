@@ -123,6 +123,9 @@ const deleteTodo = async (req, res) =>{
             {$set: {
                     isDelete:true,
                 }})
+        return res.send({
+            massage:"Done"
+        })
     }catch (error) {
         res.status(500).send("Server Error");
     }
