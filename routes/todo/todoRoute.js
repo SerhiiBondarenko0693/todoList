@@ -43,7 +43,9 @@ const addTodo = async (req, res) =>{
         text:text,
         isOpen:true,
         isDelete:false,
-        user:userId
+        user:userId,
+        date:new Date
+
     }
     try{
         await client.connect();
