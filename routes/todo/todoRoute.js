@@ -80,25 +80,25 @@ const doneTodo = async (req, res) =>{
 
 
 const updateTodo = async (req, res) =>{
-    const {_id,title, text, isOpen, isDelete} = req.body;
+    const {id,title, text, isOpen, isDelete} = req.body;
     const updateObj = {
         title:title,
         text:text,
         isOpen:isOpen,
         isDelete:isDelete,
         date:new Date,
-        _id:id
+        id:id
     }
 
     try{
-        const todo = {_id: new ObjectId(_id)};
+        const todo = {_id: new ObjectId(id)};
         console.log(todo);
-        const isTodoBase = await todoDB.findOne({_id: new ObjectId(_id)})
+        const isTodoBase = await todoDB.findOne({_id: new ObjectId(id)})
         console.log(isTodoBase);
         if(isTodoBase){
             await client.connect()
             await todoDB.updateOne(
-                { _id: new ObjectId(_id) },
+                { _id: new ObjectId(id) },
                 {$set: {
                         title:title,
                         text:text,
