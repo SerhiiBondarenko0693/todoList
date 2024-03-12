@@ -87,7 +87,7 @@ const updateTodo = async (req, res) =>{
         isOpen:isOpen,
         isDelete:isDelete,
         date:new Date,
-        id:id
+        _id:id
     }
 
     try{
