@@ -50,9 +50,7 @@ const addTodo = async (req, res) =>{
     try{
         await client.connect();
         await todoDB.insertOne(newTodo)
-        res.send({
-            massage:"Done"
-        })
+        res.send(newTodo)
     }catch (error) {
         res.status(500).send("Server Error");
     }
